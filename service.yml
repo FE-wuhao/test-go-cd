@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service #类型这次是Service了
+metadata:
+  name: eact-docker-svc
+spec:
+  type: NodePort #NodePort没有 外网不能访问 只能集群访问service接口  nodeport和service也是通过iptables转发的
+  selector:
+    app: heact-docker #这里的标签 表示这个服务会选择这种标签的pod  作为他的后端服务  他来当pod外层的service 统一服务
+  ports:
+    - protocol: TCP
+      nodePort: 30001 #NodePort端口  用来外部访问的  如果不设置，会随机选一个范围(30000～32767）
+      port: 8080
+      targetPort: 80

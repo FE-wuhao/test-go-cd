@@ -1,0 +1,22 @@
+apiVersion: apps/v1 #版本信息
+kind: Deployment #文件类型
+metadata: #Deployment资源的元数据信息  name 和 labels必须有
+  name: react-docker
+  labels:
+    app: react-docker
+spec: #spec部分是该Deployment的规格说明。
+  replicas: 1 #副本数  意味着http的pod 会有三个
+  selector: #defines how the Deployment finds which Pods to manage  与下面的template定义的标签一致
+    matchLabels:
+      app: react-docker
+  template: #每个pod的模板配置信息在这里
+    metadata: #pod资源的元数据信息 labels必须有  不然上面的selector会选不到
+      labels:
+        app: react-docker
+    spec: #spec描述Pod的规格，此部分定义Pod中每一个容器的属性，name和image是必需的。
+      containers:
+        - name: react-docker #镜像名称
+          image: react-docker #镜像地址，如果是本地docker镜像，需要添加imagePullPolicy: Never，否则镜像加载失败
+          imagePullPolicy: IfNotPresent #拉取策略：Always 总是拉取远程镜像，IfNotPresent 默认值,本地有则使用本地镜像,不拉取，Never 只使用本地镜像，从不拉取
+          ports:
+            - containerPort: 80
